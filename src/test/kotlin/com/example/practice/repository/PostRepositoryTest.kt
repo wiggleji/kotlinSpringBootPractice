@@ -1,0 +1,30 @@
+package com.example.practice.repository
+
+import com.example.practice.domain.Post
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PostRepositoryTest @Autowired constructor(
+    val entityManager: TestEntityManager,
+    val postRepository: PostRepository) {
+
+    @Test
+    fun `When findByTitle then return Post`() {
+        // given
+        val testPost = Post("test post", "test user", "test content")
+        entityManager.persist(testPost)
+        entityManager.flush()
+
+        // when
+        val foundPost = postRepository.findByTitle(testPost.title)
+
+        // then
+        Assertions.assertThat(foundPost).isEqualTo(testPost)
+    }
+}
