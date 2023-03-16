@@ -1,0 +1,14 @@
+version: "2"
+services:
+  db:
+    image: postgres:latest
+    container_name: pratice_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwer1234
+      POSTGRES_DB: practice
+    volumes:
+      - ./docker_dir/postgresql/data:/var/lib/postgresql/data
