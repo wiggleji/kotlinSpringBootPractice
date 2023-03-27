@@ -15,6 +15,20 @@ class PostRepositoryTest @Autowired constructor(
     val postRepository: PostRepository) {
 
     @Test
+    fun `When findById then return Post`() {
+        val testPost = Post("test post", "test user", "test content")
+        entityManager.persist(testPost)
+        entityManager.flush()
+        entityManager.refresh(testPost)
+
+        // when
+        val foundPost: Post? = postRepository.findById(testPost.id).orElse(null)
+
+        // then
+        Assertions.assertThat(foundPost).isEqualTo(testPost)
+    }
+
+    @Test
     fun `When findByTitle then return Post`() {
         // given
         val testPost = Post("test post", "test user", "test content")
@@ -23,6 +37,20 @@ class PostRepositoryTest @Autowired constructor(
 
         // when
         val foundPost = postRepository.findByTitle(testPost.title)
+
+        // then
+        Assertions.assertThat(foundPost).isEqualTo(testPost)
+    }
+
+    @Test
+    fun `When findByAuthor then return Post`() {
+        // given
+        val testPost = Post("test post", "test user", "test content")
+        entityManager.persist(testPost)
+        entityManager.flush()
+
+        // when
+        val foundPost = postRepository.findByAuthor(testPost.author)
 
         // then
         Assertions.assertThat(foundPost).isEqualTo(testPost)

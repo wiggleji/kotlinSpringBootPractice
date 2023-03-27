@@ -10,5 +10,5 @@ class Post (
     val title: String,
     val author: String,
     val content: String,
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
 ) : BaseEntity()
