@@ -7,6 +7,8 @@ import java.util.Optional
 
 @Repository
 interface PostRepository : JpaRepository<Post, Long> {
+    fun findPostById(id: Long): Post?
+
     fun findByTitle(title: String): Post?
 
     fun findByAuthor(name: String): Post?
