@@ -16,6 +16,7 @@ class PostRepositoryTest @Autowired constructor(
 
     @Test
     fun `When findById then return Post`() {
+        // given
         val testPost = Post("test post", "test user", "test content")
         entityManager.persist(testPost)
         entityManager.flush()

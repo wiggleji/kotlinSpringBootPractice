@@ -9,28 +9,22 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.PathVariable
 
 @Service
+@Transactional(readOnly = true)
 class PostService (
-        private val postRepository: PostRepository
+        val postRepository: PostRepository
 ){
     @Transactional
-    fun createPost(createDto: PostCreateDto): Post {
-        return postRepository.save(createDto.toEntity())
-    }
+    fun createPost(createDto: PostCreateDto): Post = postRepository.save(createDto.toEntity())
 
-    fun getPosts(): List<Post> {
-        return postRepository.findAll()
-    }
+    fun getPosts(): List<Post>  = postRepository.findAll()
 
-    fun getPost(id:Long): Post? {
-        return postRepository.findPostById(id) ?: throw IllegalStateException("no posts")
-    }
+    fun getPost(id:Long): Post? = postRepository.findPostById(id) ?: throw IllegalStateException("no posts")
 
     @Transactional
     fun updatePost(
-            @PathVariable postId: Long,
             updateDto: PostUpdateDto
     ): Post {
-        postRepository.findPostById(postId) ?: throw IllegalStateException("no posts")
-        return postRepository.save(updateDto.toEntity(postId))
+        postRepository.findPostById(updateDto.id) ?: throw IllegalStateException("no posts")
+        return postRepository.save(updateDto.toEntity(updateDto.id))
     }
 }

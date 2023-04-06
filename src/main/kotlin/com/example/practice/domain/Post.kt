@@ -6,9 +6,9 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
 @Entity
-class Post (
-    val title: String,
-    val author: String,
-    val content: String,
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
+class Post(
+        val title: String,
+        val author: String,
+        val content: String,
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long = 0,
 ) : BaseEntity()

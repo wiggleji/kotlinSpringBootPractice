@@ -2,7 +2,7 @@ package com.example.practice.domain.dto
 
 import com.example.practice.domain.Post
 
-class PostCreateDto (
+data class PostCreateDto (
     val title: String,
     val author: String,
     val content: String,
