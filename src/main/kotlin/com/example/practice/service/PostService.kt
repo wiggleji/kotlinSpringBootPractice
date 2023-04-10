@@ -22,9 +22,10 @@ class PostService (
 
     @Transactional
     fun updatePost(
+            id: Long,
             updateDto: PostUpdateDto
     ): Post {
-        postRepository.findPostById(updateDto.id) ?: throw IllegalStateException("no posts")
-        return postRepository.save(updateDto.toEntity(updateDto.id))
+        postRepository.findPostById(id) ?: throw IllegalStateException("no posts")
+        return postRepository.save(updateDto.toEntity(id))
     }
 }

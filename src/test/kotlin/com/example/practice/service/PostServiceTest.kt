@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PostServiceTest @Autowired constructor(
@@ -88,7 +90,7 @@ class PostServiceTest @Autowired constructor(
         )
 
         // when
-        val updatedPost = postService.updatePost(updateDto)
+        val updatedPost = postService.updatePost(savedPost.id, updateDto)
 
         // then
         Assertions.assertEquals(updatedPost.title, updateDto.title)
