@@ -3,6 +3,7 @@ package com.example.practice.service
 import com.example.practice.domain.Post
 import com.example.practice.domain.dto.PostCreateDto
 import com.example.practice.domain.dto.PostUpdateDto
+import com.example.practice.exception.CommonException
 import com.example.practice.repository.PostRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -65,6 +66,17 @@ class PostServiceTest @Autowired constructor(
     }
 
     @Test
+    fun `getPost returns null with invalid post id`() {
+        // given
+
+        // when
+        val inquiredPost = postService.getPost(9999)
+
+        // then
+        Assertions.assertEquals(inquiredPost, null)
+    }
+
+    @Test
     fun `getPost with invalid id throws IllegalStateException`() {
         // given
         val post = Post("post", "postContent", "testAuthor")
@@ -73,7 +85,7 @@ class PostServiceTest @Autowired constructor(
         // when
 
         // then
-        Assertions.assertThrows(IllegalStateException::class.java) { postService.getPost(-9999) }
+        Assertions.assertEquals(postService.getPost(-9999), null)
     }
 
     @Test
@@ -93,7 +105,24 @@ class PostServiceTest @Autowired constructor(
         val updatedPost = postService.updatePost(savedPost.id, updateDto)
 
         // then
-        Assertions.assertEquals(updatedPost.title, updateDto.title)
-        Assertions.assertEquals(updatedPost.content, savedPost.content)
+        Assertions.assertEquals(updatedPost?.title, updateDto.title)
+        Assertions.assertEquals(updatedPost?.content, savedPost.content)
+    }
+
+    @Test
+    fun `updatePost returns null with invalid post id`() {
+        // given
+        val updateDto = PostUpdateDto(
+            id = 9999,
+            title = "invalidPost",
+            content = "invalidPostContent",
+            author = "invalidAuthor"
+        )
+
+        // when
+        val inquiredPost = postService.updatePost(9999, updateDto)
+
+        // then
+        Assertions.assertEquals(inquiredPost, null)
     }
 }

@@ -1,6 +1,8 @@
 package com.example.practice.controller
 
 import com.example.practice.domain.Post
+import com.example.practice.domain.dto.PostUpdateDto
+import com.example.practice.domain.dto.toPostResponse
 import com.example.practice.security.SecurityConfig
 import com.example.practice.service.PostService
 import org.junit.jupiter.api.Test
@@ -19,6 +21,8 @@ import org.mockito.BDDMockito.given;
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
+import kotlin.IllegalStateException
 
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension::class)
@@ -45,9 +49,67 @@ class PostControllerTest @Autowired constructor(
 
         // then
         mockMvc.perform(MockMvcRequestBuilders.get(uri))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value(postResponses[0].title))
             .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value(postResponses[1].title))
+    }
+
+    @Test
+    fun `findPost() returns post`() {
+        // given
+        val uri = "/post/1"
+        val post = Post("testTitle1", "testAuthor", "testContent")
+        given(postService.getPost(1)).willReturn(post)
+
+        // when
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get(uri))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(post.toPostResponse().title))
+    }
+
+    @Test
+    fun `findPost() returns nothing`() {
+        // given
+        val uri = "/post/9999"
+
+        // when
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get(uri))
+            .andExpect(MockMvcResultMatchers.status().isNotFound)
+    }
+
+    @Test
+    fun `updatePost() returns updated post`() {
+        // given
+        val uri = "/post/1"
+        val post = Post("testTitle1", "testAuthor", "testContent")
+        val updatedPost = PostUpdateDto(1, "updatedTitle", "updatedAuthor", "testContent")
+        given(postService.getPost(1)).willReturn(post)
+        given(postService.updatePost(1, updatedPost)).willReturn(updatedPost.toEntity(updatedPost.id))
+
+        // when
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get(uri))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value(post.toPostResponse().title))
+    }
+
+    @Test
+    fun `updatePost() returns null`() {
+        // given
+        val uri = "/post/9999"
+
+        // when
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get(uri))
+            .andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 }
