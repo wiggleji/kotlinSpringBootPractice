@@ -1,0 +1,9 @@
+# application setting for test
+# using H2 DB
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;
+    username: sa
+    password:

@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class PracticeApplication
+class KotlinSpringBootPracticeApplication
 
 fun main(args: Array<String>) {
-	runApplication<PracticeApplication>(*args)
+	runApplication<KotlinSpringBootPracticeApplication>(*args)
 }
