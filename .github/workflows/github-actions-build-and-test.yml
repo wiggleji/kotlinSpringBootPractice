@@ -49,11 +49,11 @@ jobs:
         arguments: build -x test -x ktlintCheck -x ktlintTestSourceSetCheck -x ktlintMainSourceSetCheck -x ktlintKotlinScriptCheck
         
     - name: Current Time
-        uses: gerred/current-time@v1.0.0
-        id: current-time
-        with:
-          format: YYYY-MM-DDTHH:mm:ss
-          utcOffset: "+09:00" # UTC to KST
+      uses: gerred/current-time@v1.0.0
+      id: current-time
+      with:
+        format: YYYY-MM-DDTHH:mm:ss
+        utcOffset: "+09:00" # UTC to KST
 
     - name: get current time
       env:
