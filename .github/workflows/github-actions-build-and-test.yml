@@ -46,7 +46,7 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
-        arguments: build -x test -x ktlintCheck -x ktlintTestSourceSetCheck -x ktlintMainSourceSetCheck -x ktlintKotlinScriptCheck
+        arguments: build -x test
         
     - name: Current Time
       uses: gerred/current-time@v1.0.0
@@ -59,4 +59,9 @@ jobs:
       env:
         TIME: "${{ steps.current-time.outputs.time }}"
       run: echo $TIME
-    
+
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: ${{ always() }}  # always show test report
+      with:
+       files: build/test-results/**/*.xml
