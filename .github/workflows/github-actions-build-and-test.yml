@@ -64,11 +64,8 @@ jobs:
         TIME: "${{ steps.current-time.outputs.time }}"
       run: echo $TIME
 
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v2
-      if: always()
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: ${{ always() }}
       with:
-        files: |
-          test-results/**/*.xml
-          test-results/**/*.trx
-          test-results/**/*.json
+        files: build/test-results/**/*.xml
