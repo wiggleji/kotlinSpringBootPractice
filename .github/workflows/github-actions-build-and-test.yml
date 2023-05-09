@@ -9,9 +9,10 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches:
+    - main
+    - develop
   pull_request:
-    branches: [ "main", "develop" ]
 
 permissions:
   contents: read
@@ -45,11 +46,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
         
+    - name: Test with Gradle
+      run: ./gradlew test
+
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build -x test
-        
+      run: ./gradlew build -x test
+
     - name: Current Time
       uses: gerred/current-time@v1.0.0
       id: current-time
@@ -62,11 +64,8 @@ jobs:
         TIME: "${{ steps.current-time.outputs.time }}"
       run: echo $TIME
 
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        files: |
-          test-results/**/*.xml
-          test-results/**/*.trx
-          test-results/**/*.json
+        files: build/test-results/**/*.xml
