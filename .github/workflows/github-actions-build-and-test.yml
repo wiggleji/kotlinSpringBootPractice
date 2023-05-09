@@ -45,11 +45,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
         
+    - name: Test with Gradle
+      run: ./gradlew test
+
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build -x test
-        
+      run: ./gradlew build -x test
+
     - name: Current Time
       uses: gerred/current-time@v1.0.0
       id: current-time
